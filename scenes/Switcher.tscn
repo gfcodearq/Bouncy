@@ -1,0 +1,18 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://sprites/switcher.png" type="Texture" id=1]
+
+[node name="Switcher" type="StaticBody2D"]
+
+[node name="Sprite" type="Sprite" parent="."]
+rotation = 3.14159
+scale = Vector2( 0.276, 0.276 )
+texture = ExtResource( 1 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PoolVector2Array( -34, 10, -1, -23, 1, -23, 34, 10, 34, 12, 30, 16, 28, 16, 0, -12, -27, 16, -29, 16, -34, 12 )
+
+[node name="Area2D" type="Area2D" parent="." groups=["collision_switcher"]]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Area2D"]
+polygon = PoolVector2Array( -35, 9, -1, -24, 1, -24, 35, 9, 35, 13, 31, 17, 27, 17, 0, -10, -27, 17, -30, 17, -35, 12 )

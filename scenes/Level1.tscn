@@ -1,0 +1,142 @@
+[gd_scene load_steps=17 format=2]
+
+[ext_resource path="res://scenes/Player.tscn" type="PackedScene" id=1]
+[ext_resource path="res://scenes/Bouncer.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scenes/BouncerDown.tscn" type="PackedScene" id=3]
+[ext_resource path="res://scenes/arrow_bounce.tscn" type="PackedScene" id=4]
+[ext_resource path="res://sounds/music_level.mp3" type="AudioStream" id=5]
+[ext_resource path="res://scenes/hearts.tscn" type="PackedScene" id=6]
+[ext_resource path="res://scenes/goal.tscn" type="PackedScene" id=7]
+
+[sub_resource type="GDScript" id=9]
+script/source = "extends Node2D
+
+var seconds = 0
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	$music_level.play()
+	Signals.emit_signal(\"level1\")
+
+func _process(delta):
+	$text_bounce.text = \"Rebotes: \" + String(Game.bounce)
+	$text_time.text = \"Tiempo: \" + String(seconds)
+
+func _on_level_time_timeout():
+	seconds += 1
+	Signals.emit_signal(\"time\")
+
+func reset_time():
+	pass
+"
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 34.25, 269 )
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 13.25, 271.5 )
+
+[sub_resource type="RectangleShape2D" id=3]
+extents = Vector2( 564, 16.5 )
+
+[sub_resource type="RectangleShape2D" id=4]
+extents = Vector2( 11, 270.5 )
+
+[sub_resource type="DynamicFontData" id=5]
+font_path = "res://fonts/BebasNeue-Regular.ttf"
+
+[sub_resource type="DynamicFont" id=6]
+size = 20
+font_data = SubResource( 5 )
+
+[sub_resource type="DynamicFontData" id=7]
+font_path = "res://fonts/BebasNeue-Regular.ttf"
+
+[sub_resource type="DynamicFont" id=8]
+size = 20
+font_data = SubResource( 7 )
+
+[node name="Level1" type="Node2D"]
+script = SubResource( 9 )
+__meta__ = {
+"_edit_vertical_guides_": [ 379.0, 813.0 ]
+}
+
+[node name="hearts" parent="." instance=ExtResource( 6 )]
+
+[node name="goal2" parent="." instance=ExtResource( 7 )]
+
+[node name="ColorRect" type="ColorRect" parent="."]
+margin_right = 963.0
+margin_bottom = 543.0
+
+[node name="Player" parent="." instance=ExtResource( 1 )]
+position = Vector2( 103, 265 )
+
+[node name="BouncerDown" type="YSort" parent="."]
+
+[node name="BouncerDown" parent="BouncerDown" instance=ExtResource( 3 )]
+position = Vector2( 379, 162 )
+
+[node name="BouncerUp" type="YSort" parent="."]
+
+[node name="BouncerUp" parent="BouncerUp" instance=ExtResource( 2 )]
+position = Vector2( 110, 478 )
+
+[node name="BouncerUp2" parent="BouncerUp" instance=ExtResource( 2 )]
+position = Vector2( 379, 478 )
+
+[node name="arrow_bounce" parent="." instance=ExtResource( 4 )]
+position = Vector2( -65, 263 )
+
+[node name="active_arrow" type="Area2D" parent="." groups=["active_arrow"]]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="active_arrow"]
+position = Vector2( 377, 270 )
+shape = SubResource( 1 )
+
+[node name="goal" type="Area2D" parent="." groups=["goal"]]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="goal"]
+position = Vector2( 960.75, 268.5 )
+shape = SubResource( 2 )
+
+[node name="out_area" type="Area2D" parent="." groups=["out_area"]]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="out_area"]
+position = Vector2( 477, 557.5 )
+shape = SubResource( 3 )
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="out_area"]
+position = Vector2( 477, -17 )
+shape = SubResource( 3 )
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="out_area"]
+position = Vector2( -11, 270.5 )
+shape = SubResource( 4 )
+
+[node name="text_bounce" type="Label" parent="."]
+margin_left = 812.0
+margin_top = 53.0
+margin_right = 881.0
+margin_bottom = 77.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 6 )
+text = "xxx"
+
+[node name="text_time" type="Label" parent="."]
+margin_left = 812.0
+margin_top = 76.0
+margin_right = 852.0
+margin_bottom = 100.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 8 )
+text = "xxx"
+
+[node name="level_time" type="Timer" parent="."]
+autostart = true
+
+[node name="music_level" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 5 )
+volume_db = -5.0
+
+[connection signal="timeout" from="level_time" to="." method="_on_level_time_timeout"]

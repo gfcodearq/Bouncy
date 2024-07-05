@@ -1,0 +1,114 @@
+[gd_scene load_steps=17 format=2]
+
+[ext_resource path="res://scenes/goal.tscn" type="PackedScene" id=1]
+[ext_resource path="res://scenes/goal_stage.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scenes/collision_out.tscn" type="PackedScene" id=3]
+[ext_resource path="res://scripts/Level5.gd" type="Script" id=4]
+[ext_resource path="res://scenes/Player.tscn" type="PackedScene" id=5]
+[ext_resource path="res://scenes/Switcher.tscn" type="PackedScene" id=6]
+[ext_resource path="res://scenes/hearts.tscn" type="PackedScene" id=7]
+[ext_resource path="res://scenes/Bouncer_visible.tscn" type="PackedScene" id=8]
+[ext_resource path="res://sounds/music_level.mp3" type="AudioStream" id=9]
+[ext_resource path="res://scenes/BouncerDown.tscn" type="PackedScene" id=10]
+[ext_resource path="res://scenes/arrow_bounce_left.tscn" type="PackedScene" id=11]
+
+[sub_resource type="DynamicFontData" id=1]
+font_path = "res://fonts/BebasNeue-Regular.ttf"
+
+[sub_resource type="DynamicFont" id=2]
+size = 20
+font_data = SubResource( 1 )
+
+[sub_resource type="DynamicFontData" id=3]
+font_path = "res://fonts/BebasNeue-Regular.ttf"
+
+[sub_resource type="DynamicFont" id=4]
+size = 20
+font_data = SubResource( 3 )
+
+[sub_resource type="RectangleShape2D" id=5]
+extents = Vector2( 7.5, 271 )
+
+[node name="Level5" type="Node2D"]
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_horizontal_guides_": [ 488.0 ]
+}
+
+[node name="goal" parent="." instance=ExtResource( 1 )]
+
+[node name="ColorRect" type="ColorRect" parent="."]
+margin_top = -2.0
+margin_right = 960.0
+margin_bottom = 538.0
+
+[node name="goal2" parent="." instance=ExtResource( 2 )]
+
+[node name="out_area" parent="." instance=ExtResource( 3 )]
+
+[node name="hearts" parent="." instance=ExtResource( 7 )]
+
+[node name="Player" parent="." instance=ExtResource( 5 )]
+position = Vector2( 170, 149 )
+
+[node name="switcher" type="YSort" parent="."]
+
+[node name="Switcher" parent="switcher" instance=ExtResource( 6 )]
+position = Vector2( 315, 359 )
+
+[node name="Switcher2" parent="switcher" instance=ExtResource( 6 )]
+position = Vector2( 666, 471 )
+
+[node name="bouncer_visible" type="YSort" parent="."]
+
+[node name="Bouncer_visible" parent="bouncer_visible" instance=ExtResource( 8 )]
+position = Vector2( 178, 470 )
+
+[node name="Bouncer_visible2" parent="bouncer_visible" instance=ExtResource( 8 )]
+position = Vector2( 877, 470 )
+
+[node name="Bouncer_visible3" parent="bouncer_visible" instance=ExtResource( 8 )]
+position = Vector2( 439, 470 )
+
+[node name="text_time" type="Label" parent="."]
+margin_left = 812.0
+margin_top = 80.0
+margin_right = 852.0
+margin_bottom = 94.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 2 )
+text = "xxx"
+
+[node name="text_bounce" type="Label" parent="."]
+margin_left = 812.0
+margin_top = 53.0
+margin_right = 852.0
+margin_bottom = 67.0
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+custom_fonts/font = SubResource( 4 )
+text = "xxx"
+
+[node name="level_time" type="Timer" parent="."]
+autostart = true
+
+[node name="music_level" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 9 )
+volume_db = -5.0
+
+[node name="BouncerDown" parent="." instance=ExtResource( 10 )]
+position = Vector2( 533, 65 )
+
+[node name="arrow_bounce_left" parent="." instance=ExtResource( 11 )]
+position = Vector2( 1038, 223 )
+
+[node name="active_arrow" type="Area2D" parent="." groups=["active_arrow"]]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="active_arrow"]
+position = Vector2( 218.5, 269 )
+shape = SubResource( 5 )
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="active_arrow"]
+position = Vector2( 776, 268 )
+shape = SubResource( 5 )
+
+[connection signal="timeout" from="level_time" to="." method="_on_level_time_timeout"]
